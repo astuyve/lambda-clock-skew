@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "ntp-time-sync": "^0.3.0"
+  }
+}

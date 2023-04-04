@@ -1,0 +1,51 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: node-clock-skew
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-2
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "tag:GetResources"
+          Resource: "*" # Resource scoping not supported
+        - Effect: "Allow"
+          Action:
+            - "lambda:InvokeFunction"
+          Resource: 'arn:aws:lambda:us-east-2:425362996713:function:node-clock-skew-dev-handler'
+
+functions:
+  handler:
+    handler: handler.handler
+
+  nodejs-minimal-busy-caller:
+    handler: busy_caller.handler
+    timeout: 300 # should be same as the schedule rate, so one busy-caller is always running
+    events:
+      - schedule:
+          rate: rate(5 minutes)
+    environment:
+      freq: 500 # the frequency (ms) to invoke the marked functions
+      TARGET_FUNC_ARN: !GetAtt HandlerLambdaFunction.Arn
