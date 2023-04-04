@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "@aws-sdk/client-lambda": "^3.306.0",
     "ntp-time-sync": "^0.3.0"
   }
 }
